@@ -1,0 +1,5 @@
+webrtcvad
+pydub
+soundfile
+numpy
+matplotlib
