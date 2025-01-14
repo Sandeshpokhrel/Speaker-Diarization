@@ -1,0 +1,7 @@
+LibriSpeech/
+merged_audio/
+train-clean-360/
+va_filtered_audio/
+__pycache__/
+venv/
+*.flac
