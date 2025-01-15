@@ -42,21 +42,34 @@ function UserDetails() {
   }, []);
 
   return (
-    <div className="userdetails-container">
-      <h2>User Details</h2>
-      {error && <p className="error">{error}</p>}
-      {userDetails && (
-        <div>
-          <p>Username: {userDetails.username}</p>
-          <p>Email: {userDetails.email}</p>
-          <p>First Name: {userDetails.first_name}</p>
-          <p>Last Name: {userDetails.last_name}</p>
-          <p>Phone Number: {userDetails.phone_number}</p>
+    <div>
+      <div className="navbar">
+        <div className="navbar-left">
+          <button onClick={() => navigate("/")}>Home</button>
+          <button onClick={() => navigate("/diarization")}>Diarization</button>
+          <button onClick={() => navigate("/about")}>About this App</button>
         </div>
-      )}
-      <button onClick={handleLogout}>Logout</button>
+
+        <div className="navbar-right">
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      </div>
+
+      <div className="userdetails-container">
+        <h2>User Details</h2>
+        {error && <p className="error">{error}</p>}
+        {userDetails && (
+          <div>
+            <p>Username: {userDetails.username}</p>
+            <p>Email: {userDetails.email}</p>
+            <p>First Name: {userDetails.first_name}</p>
+            <p>Last Name: {userDetails.last_name}</p>
+            <p>Phone Number: {userDetails.phone_number}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
-}
+};
 
 export default UserDetails;

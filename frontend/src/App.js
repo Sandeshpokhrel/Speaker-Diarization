@@ -1,26 +1,25 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Home from './Home';
-import Login from './Login';
-import Register from './Register';
-import UserDetails from './UserDetails';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./components/HomePage";
+import RegisterPage from "./components/Register";
+import LoginPage from "./components/Login";
+import UserDetailPage from "./components/UserDetails";
+import MainPage from "./components/MainPage";
+import AboutPage from "./components/AboutPage";
 
 function App() {
   return (
     <Router>
-      <div className="menu">
-        <Link to="/home" className="home-button">Home</Link>
-      </div>
       <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/userdetails" element={<UserDetails />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/userdetails" element={<UserDetailPage />} />
+        <Route path="/diarization" element={<MainPage />} />
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
