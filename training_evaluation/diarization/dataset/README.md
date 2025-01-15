@@ -27,3 +27,6 @@
 ### step6: run wav_rename.py
     rename wav.scp for the location of audio data
     (necessary if we train in Kaggle or change the location)
+
+### step7: run copy_paste.py
+    copy utt2spk file from unmerged audio directory - contains speaker utterance id map to the speaker id

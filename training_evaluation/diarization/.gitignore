@@ -2,6 +2,14 @@ LibriSpeech/
 merged_audio/
 train-clean-360/
 va_filtered_audio/
+model/
 __pycache__/
 venv/
+
 *.flac
+*.rar
+*.zip
+*.tar.gz
+*.tar
+*.gz
+*.7z
