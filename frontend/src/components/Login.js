@@ -30,8 +30,10 @@ function Login() {
       }
 
       const data = await response.json();
-      localStorage.setItem("access", data.access);
-      localStorage.setItem("refresh", data.refresh);
+
+      // Save tokens to their respective storage
+      localStorage.setItem("access", data.access); // Stored in localStorage instead of memory
+      localStorage.setItem("refresh", data.refresh); // Persistent storage
 
       setMessage("Login successful! Redirecting...");
       setTimeout(() => navigate("/diarization"), 1000);

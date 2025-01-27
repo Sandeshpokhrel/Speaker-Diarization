@@ -1,3 +1,4 @@
+/* General Styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -68,12 +69,113 @@ body {
 .main-content {
   width: 90%;
   max-width: 800px;
-  padding: 20px; /* Add padding for content spacing */
-  margin-top: 70px; /* Ensure it is below the navbar */
+  padding: 20px;
+  margin-top: 70px;
+  text-align: center; /* Center align text for main content */
 }
 
+/* Centered Heading */
+.center-heading {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
 
-/* Other styles remain the same */
+/* File Upload Section */
+.upload-section {
+  margin-bottom: 30px;
+}
+
+.file-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.upload-label {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.file-input {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.action-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.action-button:hover {
+  background-color: #0056b3;
+}
+
+.action-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Results Container */
+.results-container {
+  margin-top: 40px;
+}
+
+/* Table Styles */
+.transcript-table {
+  width: 80%; /* Reduced width */
+  margin: 0 auto; /* Centered table */
+  border-collapse: collapse;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.transcript-table th,
+.transcript-table td {
+  padding: 16px;
+  text-align: left; /* Left-align all text in the table */
+  border-bottom: 1px solid #ddd;
+}
+
+.transcript-table th {
+  background-color: #4CAF50;
+  color: white;
+  font-size: 18px;
+}
+
+.transcript-table td {
+  background-color: #f9f9f9;
+  font-size: 16px;
+  color: #555;
+}
+
+.transcript-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.transcript-table tr:hover {
+  background-color: #ddd;
+}
+
+.transcript-content {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Other content styles */
 h2,
 h3 {
   font-size: 18px;
@@ -88,28 +190,6 @@ h3 {
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 4px;
-}
-
-.action-button,
-.record-button {
-  display: inline-block;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  font-size: 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.record-button.recording {
-  background-color: #ff4d4d;
-}
-
-.action-button:hover,
-.record-button:hover {
-  background-color: #0056b3;
 }
 
 .error-text {

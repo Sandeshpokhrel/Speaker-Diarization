@@ -1,10 +1,69 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import "./AboutPage.css";
 
 const AboutPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // // Function to check if a token is expired
+  // const isTokenExpired = (token) => {
+  //   try {
+  //     const { exp } = jwtDecode(token);
+  //     return Date.now() >= exp * 1000;
+  //   } catch (error) {
+  //     return true;
+  //   }
+  // };
+
+  // // Function to refresh the access token
+  // const refreshAccessToken = async (refreshToken) => {
+  //   try {
+  //     const response = await fetch("http://localhost:8000/auth/jwt/refresh", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ refresh: refreshToken }),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to refresh access token");
+  //     }
+
+  //     const data = await response.json();
+  //     localStorage.setItem("access", data.access);
+  //     return data.access;
+  //   } catch (error) {
+  //     console.error("Error refreshing token:", error);
+  //     return null;
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const accessToken = localStorage.getItem("access");
+  //   const refreshToken = localStorage.getItem("refresh");
+
+  //   // Redirect to login if tokens are missing
+  //   if (!accessToken || !refreshToken) {
+  //     navigate("/login");
+  //     return;
+  //   }
+
+  //   // Check if the access token is expired
+  //   if (isTokenExpired(accessToken)) {
+  //     refreshAccessToken(refreshToken).then((newAccessToken) => {
+  //       if (!newAccessToken) {
+  //         navigate("/login");
+  //       }
+  //     });
+  //   }
+  // }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    navigate("/login");
+  };
 
   return (
     <div className="about-container">
@@ -31,7 +90,7 @@ const AboutPage = () => {
           </button>
         </div>
         <div className="navbar-right">
-          <button className="logout-button" onClick={() => navigate('/login')}>
+          <button className="logout-button" onClick={handleLogout}>
             Logout
           </button>
         </div>
