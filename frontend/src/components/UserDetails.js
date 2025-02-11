@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import './UserDetails.css';
+import Navbar from './Navbar';
 
 function UserDetails() {
   const [userDetails, setUserDetails] = useState(null);
@@ -95,7 +96,8 @@ function UserDetails() {
 
   return (
     <div>
-      <div className="navbar">
+      <Navbar/>
+      {/* <div className="navbar">
         <div className="navbar-left">
           <button onClick={() => navigate("/")}>Home</button>
           <button onClick={() => navigate("/diarization")}>Diarization</button>
@@ -105,9 +107,9 @@ function UserDetails() {
         <div className="navbar-right">
           <button onClick={handleLogout}>Logout</button>
         </div>
-      </div>
+      </div> */}
 
-      <div className="userdetails-container">
+      <div className="userdetails-container font-play">
         <h2>User Details</h2>
         {error && <p className="error">{error}</p>}
         {userDetails && (
