@@ -1,4 +1,11 @@
-.home-page {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn:hover {
+  background-color: #1E3A8A !important;
+}
+/* .home-page {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6,7 +13,8 @@
   font-family: 'Arial', sans-serif;
   background: linear-gradient(to bottom, #f5f7fa, #c3cfe2);
   min-height: 100vh;
-}
+} */
+/* 
 
 .text-section {
   text-align: center;
@@ -96,4 +104,4 @@
 
 .userdetails-btn:hover {
   background-color: #0e6f8e;
-}
+} */

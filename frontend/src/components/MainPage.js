@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import "./MainPage.css";
-
+import Navbar from "./Navbar";
 const MainPage = () => {
   const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
@@ -90,41 +90,61 @@ const MainPage = () => {
   };
 
   return (
-    <div className="second-container">
-      <div className="navbar">
-        <div className="navbar-left">
+    <div className="second-container font-play">
+      <Navbar/>
+      {/* <div className="navbar"> */}
+        {/* <div className="navbar-left">
           <button onClick={() => navigate("/")}>Home</button>
           <button onClick={() => navigate("/userdetails")}>Profile</button>
           <button onClick={() => navigate("/about")}>About this App</button>
         </div>
         <div className="navbar-right">
           <button onClick={handleLogout}>Logout</button>
-        </div>
-      </div>
-  
-      <div className="main-content">
-        <h1 className="center-heading">Speakers Diarization</h1>
+        </div> */}
         
-        <div className="upload-section">
-          <form onSubmit={handleSubmit}>
-            <div className="file-input-container">
-              <label className="upload-label">Upload Audio File</label>
-              <input
-                type="file"
-                accept="audio/*"
-                onChange={handleFileChange}
-                className="file-input"
-              />
-            </div>
-            <button
-              type="submit"
-              className="action-button"
-              disabled={!selectedFile}
-            >
-              Process Audio
-            </button>
-          </form>
+      {/* </div> */}
+      <div className="main-content ">
+      
+        <h1 className="text-yellow-500 text-3xl font-bold center-heading">Speakers Diarization</h1>
+        
+        <div className="flex items-center justify-center bg-gradient-to-r ">
+          <div className="p-6 w-96 bg-white/10 backdrop-blur-lg shadow-lg rounded-2xl border border-white/20">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* File Upload Section */}
+              <div className="flex flex-col items-center gap-3">
+                <label className="text-white text-lg font-semibold">
+                  Upload Audio File
+                </label>
+                <input
+                  type="file"
+                  accept="audio/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  id="file-upload"
+                />
+                <label
+                  htmlFor="file-upload"
+                  className="cursor-pointer bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-300 hover:bg-white/30"
+                >
+                  Choose File
+                </label>
+                {selectedFile && (
+                  <p className="text-sm text-gray-300">Selected: {selectedFile.name}</p>
+                )}
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 hover:bg-blue-600 disabled:opacity-50"
+                disabled={!selectedFile}
+              >
+                Process Audio
+              </button>
+            </form>
+          </div>
         </div>
+
   
         {diarizationResults && (
           <div className="results-container">
@@ -152,6 +172,9 @@ const MainPage = () => {
           </div>
         )}
       </div>
+      
+  
+      
     </div>
   );  
 };
