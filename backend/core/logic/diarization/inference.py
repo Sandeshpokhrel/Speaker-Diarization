@@ -97,8 +97,6 @@ def parse_arguments() -> SimpleNamespace:
     for key, value in config.items():
         if hasattr(args, key):
             setattr(args, key, value)
-
-    # args.estimate_spk_qty = 3 #####
     
     return args
 
@@ -337,4 +335,5 @@ def speaker_diarization(user_audio_dir):
     generate_segments(f'{user_audio_dir}/wav.scp', f'{user_audio_dir}/segments')
     generate_rttm(user_audio_dir)
     return rttm_to_list(f'{user_audio_dir}/{file_name}.rttm')
+
     
