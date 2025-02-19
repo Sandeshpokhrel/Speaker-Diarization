@@ -1,3 +1,8 @@
+spicy
+soundfile
+librosa
+yamlargparse
+
 django
 djoser
 django-cors-headers
