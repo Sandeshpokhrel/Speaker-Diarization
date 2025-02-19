@@ -2,7 +2,9 @@ spicy
 soundfile
 librosa
 yamlargparse
-
+matplotlib
+pandas
+IPython
 django
 djoser
 django-cors-headers
