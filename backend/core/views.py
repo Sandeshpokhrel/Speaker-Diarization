@@ -7,6 +7,7 @@ import shutil
 from django.core.files.storage import default_storage
 
 from core.logic.diarization.inference import speaker_diarization
+from core.logic.diarization.visualize import diarization_result_base64
 from core.serializers import AudioFileSerializer
 
 
@@ -31,9 +32,11 @@ class SpeakerDiarizationView(CreateAPIView):
                     destination.write(chunk)
 
             output = speaker_diarization(audio_dir)
-            result = [i + ['text'] for i in output]  
+            result = [i + ['text'] for i in output]
 
-            return Response({'diarization_result': result}, status=status.HTTP_200_OK)
+            image_base64 = diarization_result_base64(file_path, os.path.join(audio_dir, f'{os.path.splitext(file_obj.name)[0]}.rttm'))
+
+            return Response({'diarization_result': result, 'image': image_base64}, status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -4,6 +4,11 @@ import matplotlib.cm as cm
 from IPython.display import Audio
 import numpy as np
 import pandas as pd
+import base64
+import io
+
+
+
 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -85,6 +90,48 @@ def diarization_result(audio_file_path, rttm_file_path):
     plt.legend(speaker_handles, color_map.keys(), loc='center left', bbox_to_anchor=(1, 0.5), title='Speaker')
     plt.tight_layout(rect=[0, 0, 0.85, 1])
     plt.show()
+
+
+def diarization_result_base64(audio_file_path, rttm_file_path):
+    y, sr = librosa.load(audio_file_path, sr=None)
+    time = np.linspace(0, len(y) / sr, num=len(y))
+    rttm_df = load_rttm(rttm_file_path)
+    
+    colors = cm.get_cmap('Set1', len(rttm_df['speaker'].unique()))
+    color_map = {speaker: colors(i) for i, speaker in enumerate(rttm_df['speaker'].unique())}
+
+    plt.figure(figsize=(15, 2))
+    plt.plot(time, y, label='Audio Signal', color='black')
+    plt.title('Audio Signal with Speaker Diarization')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude')
+
+    for _, segment in rttm_df.iterrows():
+        start = segment['start_time']
+        end = start + segment['duration']
+        speaker = segment['speaker']
+        plt.fill_betweenx(
+            [-1, 1],
+            start, end, 
+            color=color_map[speaker], 
+            alpha=0.4
+        )
+
+    plt.ylim(-1, 1)
+    speaker_handles = [plt.Line2D([0], [0], color=color_map[speaker], lw=4) for speaker in color_map.keys()]
+    plt.legend(speaker_handles, color_map.keys(), loc='center left', bbox_to_anchor=(1, 0.5), title='Speaker')
+    plt.tight_layout(rect=[0, 0, 0.85, 1])
+
+    # Save the figure to a BytesIO buffer
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png", bbox_inches='tight')
+    plt.close()
+    
+    # Encode the image as base64
+    buf.seek(0)
+    encoded_image = base64.b64encode(buf.getvalue()).decode('utf-8')
+    
+    return encoded_image
 
 
 # # Example
