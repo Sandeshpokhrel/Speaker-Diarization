@@ -18,17 +18,4 @@ def main():
 
 
 if __name__ == '__main__':
-    # from core.logic.diarization.inference import speaker_diarization
-    # from core.logic.diarization.visualize import diarization_result, voice_activity
-
-    # output = speaker_diarization('core/logic/diarization/user_input/user_0')
-    # for i in output:
-    #     i.append('text')
-    #     print(i)
-
-    # audio_file_path = 'core/logic/diarization/user_input/user_0/output_voice3.flac'
-    # rttm_file_path = 'core/logic/diarization/user_input/user_0/output_voice3.rttm'
-
-    # voice_activity(audio_file_path)
-    # diarization_result(audio_file_path, rttm_file_path)
     main()

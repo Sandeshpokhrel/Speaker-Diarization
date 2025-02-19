@@ -35,12 +35,10 @@ class SpeakerDiarizationView(CreateAPIView):
             result = [i + ['text'] for i in output]
 
             image_base64 = diarization_result_base64(file_path, os.path.join(audio_dir, f'{os.path.splitext(file_obj.name)[0]}.rttm'))
-
+            shutil.rmtree(audio_dir)
+            os.makedirs(audio_dir, exist_ok=True)
             return Response({'diarization_result': result, 'image': image_base64}, status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        finally:
-            shutil.rmtree(audio_dir)
-            os.makedirs(audio_dir, exist_ok=True)

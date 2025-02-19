@@ -3,61 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import "./MainPage.css";
 import Navbar from "./Navbar";
+import fetchFramework from "../framework/fetchFramework";
 const MainPage = () => {
   const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
   const [diarizationResults, setDiarizationResults] = useState(null);
-
-  // // Function to check if a token is expired
-  // const isTokenExpired = (token) => {
-  //   try {
-  //     const { exp } = jwtDecode(token);
-  //     return Date.now() >= exp * 1000;
-  //   } catch (error) {
-  //     return true;
-  //   }
-  // };
-
-  // // Function to refresh the access token
-  // const refreshAccessToken = async (refreshToken) => {
-  //   try {
-  //     const response = await fetch("http://localhost:8000/auth/jwt/refresh", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ refresh: refreshToken }),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to refresh access token");
-  //     }
-
-  //     const data = await response.json();
-  //     localStorage.setItem("access", data.access);
-  //     return data.access;
-  //   } catch (error) {
-  //     console.error("Error refreshing token:", error);
-  //     return null;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem("access");
-  //   const refreshToken = localStorage.getItem("refresh");
-
-  //   if (!accessToken || !refreshToken) {
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  //   if (isTokenExpired(accessToken)) {
-  //     refreshAccessToken(refreshToken).then((newAccessToken) => {
-  //       if (!newAccessToken) {
-  //         navigate("/login");
-  //       }
-  //     });
-  //   }
-  // }, [navigate]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleLogout = () => {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
@@ -68,20 +19,33 @@ const MainPage = () => {
     setSelectedFile(event.target.files[0]);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
+    setIsLoading(true); // Set loading to true when submitting
+    const formData = new FormData();
+    formData.append("audio", selectedFile);
     event.preventDefault();
-    setDiarizationResults([
-      ["speaker_1", [0.00, 5.35, "नमस्कार! पुल्चोक कताबाट जान्छ जानकारी गरिदिनुस न।"]],
-      ["speaker_2", [6.10, 8.43, "पुल्चोक रत्नपार्कबाट गाडी चढेर जना मिल्छ।"]],
-      ["speaker_0", [9.44, 14.56, "तपाई हिड्दै गएपनि आधि घण्टामा मज्जाले पुग्नुहुन्छ।"]],
-      ["speaker_1", [15.00, 17.85, "धेरै धेरै धन्यवाद!"]],
-      ["speaker_3", [20.09, 24.35, "पर्खनुस त, म पनि जादै छु पुल्चोक।"]],
-      ["speaker_2", [25.06, 30.39, "ल हजुरले साथी भेट्नुभयो, कुरा गर्दै जानुहोस।"]],
-      ["speaker_0", [31.22, 33.88, "राम्रोसंग जानुहोला।"]],
-      ["speaker_1", [33.90, 37.45, "हुन्छ, मौका मिल्यो भने फेरी भेट्न पाईएला।"]]
-    ]);
+    // setDiarizationResults([
+    //   ["speaker_1", [0.00, 5.35, "नमस्कार! पुल्चोक कताबाट जान्छ जानकारी गरिदिनुस न।"]],
+    //   ["speaker_2", [6.10, 8.43, "पुल्चोक रत्नपार्कबाट गाडी चढेर जना मिल्छ।"]],
+    //   ["speaker_0", [9.44, 14.56, "तपाई हिड्दै गएपनि आधि घण्टामा मज्जाले पुग्नुहुन्छ।"]],
+    //   ["speaker_1", [15.00, 17.85, "धेरै धेरै धन्यवाद!"]],
+    //   ["speaker_3", [20.09, 24.35, "पर्खनुस त, म पनि जादै छु पुल्चोक।"]],
+    //   ["speaker_2", [25.06, 30.39, "ल हजुरले साथी भेट्नुभयो, कुरा गर्दै जानुहोस।"]],
+    //   ["speaker_0", [31.22, 33.88, "राम्रोसंग जानुहोला।"]],
+    //   ["speaker_1", [33.90, 37.45, "हुन्छ, मौका मिल्यो भने फेरी भेट्न पाईएला।"]]
+    // ]);
+    try {
+      let response = await fetchFramework({endpoint: "/api/speaker_diarization/", form: formData});
+      console.log(response.diarization_result);
+      setDiarizationResults(response.diarization_result);
+    }
+    catch (error) {
+      console.error(error);
+    }finally {
+      setIsLoading(false); // Set loading to false when done
+    }
   };
-
+ 
   const speakerColors = {
     'speaker_0': '#8884d8',
     'speaker_1': '#82ca9d',
@@ -137,9 +101,17 @@ const MainPage = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 hover:bg-blue-600 disabled:opacity-50"
-                disabled={!selectedFile}
+                disabled={!selectedFile || isLoading}
+                onClick={handleSubmit}
               >
-                Process Audio
+                {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                  Processing...
+                </div>
+              ) : (
+                'Process Audio'
+              )}
               </button>
             </form>
           </div>
@@ -159,13 +131,13 @@ const MainPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {diarizationResults.map(([speaker, [start, end, content]], index) => (
-                    <tr key={index}>
-                      <td>{speaker}</td>
-                      <td>{start.toFixed(2)}s - {end.toFixed(2)}s</td>
-                      <td className="transcript-content">{content}</td>
-                    </tr>
-                  ))}
+                {diarizationResults.map(([speaker, start, end, text], index) => (
+                  <tr key={index}>
+                    <td>{speaker}</td>
+                    <td>{start.toFixed(2)}s - {end.toFixed(2)}s</td>
+                    <td className="transcript-content">{text}</td>
+                  </tr>
+                ))}
                 </tbody>
               </table>
             </div>
