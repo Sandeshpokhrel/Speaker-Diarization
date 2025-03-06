@@ -3,3 +3,10 @@ pydub
 soundfile
 numpy
 matplotlib
+
+torch
+torchvision
+soundfile
+librosa
+tensorboard
+yamlargparse

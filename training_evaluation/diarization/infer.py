@@ -2,12 +2,12 @@
 # Copyright 2022 Brno University of Technology (author: Federico Landini)
 # Licensed under the MIT license.
 
-from backend.models import (
+from eend.backend.models import (
     average_checkpoints,
     get_model,
 )
-from common_utils.diarization_dataset import KaldiDiarizationDataset
-from common_utils.gpu_utils import use_single_gpu
+from eend.common_utils.diarization_dataset import KaldiDiarizationDataset
+from eend.common_utils.gpu_utils import use_single_gpu
 from os.path import join
 from pathlib import Path
 from scipy.signal import medfilt
@@ -148,7 +148,8 @@ def postprocess_output(
     median_window_length: int
 ) -> torch.Tensor:
     thresholded = probabilities > threshold
-    thresholded_int = thresholded.to(dtype=torch.float32).numpy()
+    thresholded_int = thresholded.cpu().to(dtype=torch.float32).numpy()
+    # thresholded_int = thresholded.to(dtype=torch.float32).numpy()
     filtered = np.zeros(thresholded_int.shape)
     for spk in range(filtered.shape[1]):
         filtered[:, spk] = medfilt(
@@ -231,7 +232,11 @@ def parse_arguments() -> SimpleNamespace:
             setattr(args, key, value)
     #####
 
-    #args.estimate_spk_qty = 4 #####
+    args.epochs = '40-45'
+    args.estimate_spk_qty = 4
+    args.infer_data_dir = 'dataset/merged_audio2/_test/test_details'
+    args.models_path = 'model/trained_model/4spkos5_last'
+    args.rttms_dir = 'testing/rttms/_4spkos5_last'
     
     return args
 
@@ -280,14 +285,7 @@ if __name__ == '__main__':
     model.eval()
 
     out_dir = join(
-        args.rttms_dir,
-        f"epochs{args.epochs}",
-        f"timeshuffle{args.time_shuffle}",
-        (f"spk_qty{args.estimate_spk_qty}_"
-            f"spk_qty_thr{args.estimate_spk_qty_thr}"),
-        f"detection_thr{args.threshold}",
-        f"median{args.median_window_length}",
-        "rttms"
+        args.rttms_dir
     )
     Path(out_dir).mkdir(parents=True, exist_ok=True)
 

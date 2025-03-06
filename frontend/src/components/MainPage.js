@@ -122,24 +122,33 @@ const MainPage = () => {
           <div className="results-container">
             <div className="compact-results">
               <h3 className="center-heading">Diarization Output</h3>
-              <table className="transcript-table">
-                <thead>
-                  <tr>
-                    <th>Speaker</th>
-                    <th>Time</th>
-                    <th>Transcript</th>
-                  </tr>
-                </thead>
-                <tbody>
-                {diarizationResults.map(([speaker, start, end, text], index) => (
-                  <tr key={index}>
-                    <td>{speaker}</td>
-                    <td>{start.toFixed(2)}s - {end.toFixed(2)}s</td>
-                    <td className="transcript-content">{text}</td>
-                  </tr>
-                ))}
-                </tbody>
-              </table>
+              <div className="table-wrapper">
+              <table className="w-full border-collapse rounded-lg overflow-hidden shadow">
+                  <thead className="bg-blue-600 text-white">
+                    <tr>
+                      <th className="py-3 px-4 text-center">Speaker</th>
+                      <th className="py-3 px-4 text-center w-1/4">Time</th> {/* Wider Time Column */}
+                      <th className="py-3 px-4 text-center">Transcript</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {diarizationResults.map(([speaker, start, end, text], index) => (
+                      <tr
+                        key={index}
+                        className={`${
+                          index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                        } hover:bg-blue-50 transition`}
+                      >
+                        <td className="py-3 px-4 font-medium text-blue-700">{speaker}</td>
+                        <td className="py-3 px-4 italic text-gray-600">
+                          {start.toFixed(2)}s - {end.toFixed(2)}s
+                        </td>
+                        <td className="py-3 px-4 text-gray-800">{text}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}

@@ -6,8 +6,9 @@ import os
 import shutil
 from django.core.files.storage import default_storage
 
-from core.logic.diarization.inference import speaker_diarization
-from core.logic.diarization.visualize import diarization_result_base64
+from core.logic.inference_diarization import speaker_diarization
+from core.logic.inference_translation import np_speech_text_translation
+from core.logic.visualize import diarization_result_base64
 from core.serializers import AudioFileSerializer
 
 
@@ -16,7 +17,7 @@ class SpeakerDiarizationView(CreateAPIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
-        audio_dir = 'core/logic/diarization/user_input/user_0'
+        audio_dir = 'core/logic/user_input/user_0'
         os.makedirs(audio_dir, exist_ok=True)
 
         serializer = self.get_serializer(data=request.data)
@@ -32,13 +33,17 @@ class SpeakerDiarizationView(CreateAPIView):
                     destination.write(chunk)
 
             output = speaker_diarization(audio_dir)
-            result = [i + ['text'] for i in output]
+            text_list = np_speech_text_translation(audio_dir)
+            for i, spk in enumerate(output):
+                spk.append(text_list[i])
 
             image_base64 = diarization_result_base64(file_path, os.path.join(audio_dir, f'{os.path.splitext(file_obj.name)[0]}.rttm'))
-            shutil.rmtree(audio_dir)
-            os.makedirs(audio_dir, exist_ok=True)
-            return Response({'diarization_result': result, 'image': image_base64}, status=status.HTTP_200_OK)
+
+            return Response({'diarization_result': output, 'image': image_base64}, status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+        finally:
+            shutil.rmtree(audio_dir)
+            os.makedirs(audio_dir, exist_ok=True)

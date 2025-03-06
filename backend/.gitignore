@@ -1,7 +1,8 @@
 venv/
 __pycache__/
-db.sqlite3
 .ipynb_checkpoints/
 
 model/
 user_input/
+
+db.sqlite3

@@ -1,5 +1,6 @@
 spicy
 soundfile
+SpeechRecognition
 librosa
 yamlargparse
 matplotlib

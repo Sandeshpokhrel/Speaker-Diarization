@@ -5,6 +5,7 @@ from typing import List, Dict, Tuple
 from pydub import AudioSegment
 import numpy as np
 
+
 @dataclass
 class MergeConfig:
     # [Previous config code remains the same]
@@ -35,6 +36,7 @@ class MergeConfig:
             self.min_speakers = self.max_speakers
             print(f"Warning: Adjusted min_speakers to {self.min_speakers} to match max_speakers")
 
+
 def load_speaker_data(audio_dir: str, file_format: str) -> Dict[str, List[str]]:
     # [Previous load_speaker_data code remains the same]
     speaker_files = {}
@@ -55,14 +57,17 @@ def load_speaker_data(audio_dir: str, file_format: str) -> Dict[str, List[str]]:
     print(f"Found {len(speaker_files)} speakers with valid audio files")
     return speaker_files
 
+
 def create_silence(duration_ms: int) -> AudioSegment:
     return AudioSegment.silent(duration=duration_ms)
+
 
 def process_utterance(utt_path: str, config: MergeConfig) -> AudioSegment:
     audio = AudioSegment.from_file(utt_path, format=config.file_format)
     if audio.channels > 1:
         audio = audio.set_channels(1)
     return audio
+
 
 def merge_audio_files(speaker_files: Dict[str, List[str]], config: MergeConfig) -> Tuple[AudioSegment, List[Tuple[str, float, float, bool]]]:
     # Select speakers and utterances
@@ -93,7 +98,9 @@ def merge_audio_files(speaker_files: Dict[str, List[str]], config: MergeConfig) 
     while i < len(utterances):
         current_utt_path, _ = utterances[i]
         current_audio = process_utterance(current_utt_path, config)
-        current_utt_id = os.path.basename(current_utt_path).rsplit('.', 1)[0]
+        parent_dir, file_name = os.path.split(current_utt_path)
+        current_utt_id = os.path.join(os.path.basename(parent_dir), os.path.splitext(file_name)[0])
+        # current_utt_id = os.path.basename(current_utt_path).rsplit('.', 1)[0]
         
         # Add silence before utterance if needed
         if random.random() < config.silence_prob and i > 0:
@@ -139,7 +146,10 @@ def merge_audio_files(speaker_files: Dict[str, List[str]], config: MergeConfig) 
                     merged_audio += next_audio[overlap_ms:]
                 
                 # Add segment info for next utterance
-                next_utt_id = os.path.basename(next_utt_path).rsplit('.', 1)[0]
+
+                parent_dir, file_name = os.path.split(next_utt_path)
+                next_utt_id = os.path.join(os.path.basename(parent_dir), os.path.splitext(file_name)[0])
+                # next_utt_id = os.path.basename(next_utt_path).rsplit('.', 1)[0]
                 next_duration = len(next_audio) / 1000
                 segments_info.append((next_utt_id, next_start_time,
                                    next_start_time + next_duration, True))
@@ -157,6 +167,7 @@ def merge_audio_files(speaker_files: Dict[str, List[str]], config: MergeConfig) 
         i += 1
     
     return merged_audio, segments_info
+
 
 def prepare_dataset(unmerged_dir: str, merged_dir: str, config: MergeConfig):
     # [Previous prepare_dataset code remains the same]
@@ -198,25 +209,27 @@ def prepare_dataset(unmerged_dir: str, merged_dir: str, config: MergeConfig):
     with open(os.path.join(details_dir, "segments"), 'w') as f:
         f.write("\n".join(segments_lines) + '\n')
 
+
+
 if __name__ == "__main__":
     config = MergeConfig(
-        output_count=15,
-        min_speakers=2,
-        max_speakers=4,
-        min_utts_per_spk=1,
-        max_utts_per_spk=3,
-        silence_prob=0.7,
+        output_count=500, #####
+        min_speakers=2, #####
+        max_speakers=4, #####
+        min_utts_per_spk=1, #####
+        max_utts_per_spk=3, #####
+        silence_prob=0.5, #####
         min_silence_len=500,
         max_silence_len=2000,
-        overlap_prob=0.3,
+        overlap_prob=0.0, #####
         min_overlap_len=500,
         max_overlap_len=2000,
         max_overlap_ratio=0.5,
         file_format="flac"
     )
     
-    which_dataset = "train"
-    unmerged_dir = f"va_filtered_audio/audio/{which_dataset}"
-    merged_dir = f"merged_audio/{which_dataset}"
+    which_dataset = "_test"
+    unmerged_dir = f"dataset/va_arranged_audio/audio/{which_dataset}"
+    merged_dir = f"dataset/merged_audio2/{which_dataset}"
     
     prepare_dataset(unmerged_dir, merged_dir, config)

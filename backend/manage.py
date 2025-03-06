@@ -3,6 +3,9 @@
 import os
 import sys
 
+
+
+
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'diarization.settings')
@@ -18,4 +21,8 @@ def main():
 
 
 if __name__ == '__main__':
+    # from core.logic.diarization.inference import speaker_diarization
+    # result = speaker_diarization('core/logic/diarization/user_input/user_0')
+    # for i in result:
+    #     print(i)
     main()

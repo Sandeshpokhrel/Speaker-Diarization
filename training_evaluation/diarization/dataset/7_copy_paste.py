@@ -17,8 +17,8 @@ def copy_utt2spk_file(source_path, destination_path):
         return f"An error occurred: {e}"
 
 
-type_dataset = 'test'
-source = "dataset/va_filtered_audio/details/utt2spk"
-destination = f"dataset/merged_audio/{type_dataset}/details/utt2spk"
+type_dataset = 'train'
+source = "dataset/va_arranged_audio/details/utt2spk"
+destination = f"dataset/merged_audio2/{type_dataset}/details/utt2spk"
 print(copy_utt2spk_file(source, destination))
 
