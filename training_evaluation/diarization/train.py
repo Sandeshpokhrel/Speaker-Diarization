@@ -226,8 +226,13 @@ def parse_arguments() -> SimpleNamespace:
             setattr(args, key, value)
     #####
 
-    args.estimate_spk_qty = 4 #####
-    args.max_epochs = 10 #####
+    args.init_model_path = "model/github/LibriSpeech"
+    args.init_epochs = "90-100"
+    args.max_epochs = 1
+    args.num_speakers = 4
+    args.output_path = "model/trained_model/checkspk"
+    args.train_data_dir = "dataset/merged_audio4/train/details"
+    args.valid_data_dir = "dataset/merged_audio4/validation/details"
 
     return args
 
@@ -344,10 +349,13 @@ if __name__ == '__main__':
             labels[2] = torch.tensor([[0, 0, 1, 0, 0]] * 128, dtype=torch.int32)
             '''
             #############
+            # print("labels = ", labels) #####
             
             n_speakers = np.asarray([max(torch.where(t.sum(0) != 0)[0]) + 1
                                      if t.sum() > 0 else 0 for t in labels])
+            # print("n_speakers = ", n_speakers) #####
             max_n_speakers = max(n_speakers)
+            # print("max_n_speakers = ", max_n_speakers) #####
             features, labels = pad_sequence(features, labels, args.num_frames)
             labels = pad_labels(labels, max_n_speakers)
             features = torch.stack(features).to(args.device)
@@ -383,7 +391,7 @@ if __name__ == '__main__':
         print(f"Training metrics for epoch {epoch}:")
         for k, v in acum_train_metrics.items():
             print(f"  {k}: {v / train_batches_qty:.4f}") #/32
-        save_metrics_to_csv("model/trained_model/234spk/training_metrics.csv", acum_train_metrics, epoch, train_batches_qty)
+        save_metrics_to_csv("model/trained_model/checkspk/training_metrics.csv", acum_train_metrics, epoch, train_batches_qty)
 
 
         with torch.no_grad():
@@ -413,6 +421,6 @@ if __name__ == '__main__':
         print(f"Validation metrics for epoch {epoch}:")
         for k, v in acum_dev_metrics.items():
             print(f"  {k}: {v / dev_batches_qty:.4f}")
-        save_metrics_to_csv("model/trained_model/234spk/validation_metrics.csv", acum_dev_metrics, epoch, dev_batches_qty)
+        save_metrics_to_csv("model/trained_model/checkspk/validation_metrics.csv", acum_dev_metrics, epoch, dev_batches_qty)
 
         acum_dev_metrics = reset_metrics(acum_dev_metrics)

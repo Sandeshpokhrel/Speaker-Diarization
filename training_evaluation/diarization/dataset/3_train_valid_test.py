@@ -25,8 +25,8 @@ def train_valid_test_split(audio_dir, train_per, valid_per):
 
     # Define train, validation, and test directories
     train_dir = os.path.join(audio_dir, "train")
-    validation_dir = os.path.join(audio_dir, "validation")
-    test_dir = os.path.join(audio_dir, "test")
+    validation_dir = os.path.join(audio_dir, "valid")
+    test_dir = os.path.join(audio_dir, "_test")
 
     # Create the directories if they don't exist
     os.makedirs(train_dir, exist_ok=True)
@@ -55,5 +55,5 @@ if __name__ == "__main__":
     valid_per = 0.2 
     # test_per is automatically 1.0-(train_per+valid_per)
 
-    audio_dir = "va_filtered_audio/audio"
+    audio_dir = "dataset/va_arranged_audio/audio"
     train_valid_test_split(audio_dir, train_per, valid_per)

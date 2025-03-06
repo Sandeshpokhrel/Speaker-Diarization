@@ -1,8 +1,8 @@
 # training options
 context_size: 7
 encoder_units: 2048
-epochs: 5-9 #####
-estimate_spk_qty: 4 #####
+epochs: ()
+estimate_spk_qty: ()
 estimate_spk_qty_thr: -1
 feature_dim: 40 #23
 frame_shift: 160 #80
@@ -15,7 +15,7 @@ median_window_length: 11
 model_type: TransformerEDA
 models_path: ()
 num_frames: -1
-rttms_dir: output
+rttms_dir: ()
 sampling_rate: 16000 #8000
 seed: 3
 subsampling: 10

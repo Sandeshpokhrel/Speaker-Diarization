@@ -131,7 +131,7 @@ def plot_statistics(segments_file):
 
 if __name__ == "__main__":
     # Set the paths
-    segments_file = 'merged_audio/train/details/segments'
+    segments_file = 'dataset/merged_audio/train/details/segments'
     
     # Create visualizations
     plot_diarization(segments_file)

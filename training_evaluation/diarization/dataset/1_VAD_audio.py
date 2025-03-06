@@ -51,7 +51,7 @@ def process_directory(input_dir, output_dir):
 
     for root, dirs, files in os.walk(input_dir):
         for file in files:
-            if file.endswith('.wav') or file.endswith('.flac'):
+            if file.endswith('.wav') or file.endswith('.flac') or file.endswith('.mp3') or file.endswith('.m4a'):
                 input_file_path = os.path.join(root, file)
                 
                 relative_path = os.path.relpath(root, input_dir)
@@ -65,6 +65,6 @@ def process_directory(input_dir, output_dir):
 
 
 if __name__ == "__main__":
-    input_directory = "raw_audio"
-    output_directory = "va_filtered_audio/audio"
+    input_directory = "dataset/arranged_audio"
+    output_directory = "dataset/va_arranged_audio/audio"
     process_directory(input_directory, output_directory)
